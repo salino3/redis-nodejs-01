@@ -48,7 +48,8 @@ app.get("/characters/:id", async (req, res) => {
     `https://rickandmortyapi.com/api/character/${id}`
   );
 
-  const saveResult = await client.set(id, JSON.stringify(data));
+  const saveResult = await client.set(id, JSON.stringify(data), { EX: 3600 }); // Expira en 1 hora
+
   console.log("Save Result ID:", saveResult);
 
   return res.json(data);
