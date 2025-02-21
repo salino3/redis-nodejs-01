@@ -18,6 +18,7 @@ dotenv.config();
 
 app.use(responseTime());
 
+// Characters
 app.get("/characters", async (req, res) => {
   const reply = await client.get("characters");
 
@@ -30,6 +31,27 @@ app.get("/characters", async (req, res) => {
   const saveResult = await client.set("characters", JSON.stringify(data));
   console.log("Save Result:", saveResult);
   return res?.json(data);
+});
+
+// Character (:id)
+app.get("/characters/:id", async (req, res) => {
+  const { id } = req.params;
+
+  // Add name call to redis with call parameters
+  const reply = await client.get(id);
+
+  if (reply) {
+    return res.json(JSON.parse(reply));
+  }
+
+  const { data } = await axios.get(
+    `https://rickandmortyapi.com/api/character/${id}`
+  );
+
+  const saveResult = await client.set(id, JSON.stringify(data));
+  console.log("Save Result ID:", saveResult);
+
+  return res.json(data);
 });
 
 app.get("/ping", async (req, res) => {
