@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 
 const app = express();
 
+// Redis data remain saved always, after server down too
 const client = createClient({
   // 127.0.0.1
   host: "localhost",
