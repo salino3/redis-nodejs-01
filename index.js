@@ -2,9 +2,18 @@ import express from "express";
 import axios from "axios";
 // library check time endpoint call
 import responseTime from "response-time";
+import { createClient } from "redis";
 import dotenv from "dotenv";
 
 const app = express();
+
+const client = createClient({
+  // 127.0.0.1
+  host: "localhost",
+  // default port Redis 6379
+  port: 6379,
+});
+
 dotenv.config();
 
 app.use(responseTime());
