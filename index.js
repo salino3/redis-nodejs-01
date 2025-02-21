@@ -19,7 +19,16 @@ dotenv.config();
 app.use(responseTime());
 
 app.get("/characters", async (req, res) => {
+  const reply = await client.get("characters");
+
+  if (reply) {
+    return res.json(JSON.parse(reply));
+  }
+
   const { data } = await axios.get("https://rickandmortyapi.com/api/character");
+
+  const saveResult = await client.set("characters", JSON.stringify(data));
+  console.log("Save Result:", saveResult);
   return res?.json(data);
 });
 
@@ -27,6 +36,12 @@ app.get("/ping", async (req, res) => {
   res.send("Welcome!");
 });
 
-app.listen(process.env.PORT, () => {
-  console.log("Server running on port " + process.env.PORT);
-});
+async function main() {
+  // Before Redis, after Express
+  await client.connect();
+  await app.listen(process.env.PORT, () => {
+    console.log("Server running on port " + process.env.PORT);
+  });
+}
+
+main();
