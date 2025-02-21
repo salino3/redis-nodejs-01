@@ -37,7 +37,7 @@ app.get("/characters", async (req, res) => {
 app.get("/characters/:id", async (req, res) => {
   const { id } = req.params;
 
-  // Add name call to redis with call parameters
+  // Add name call to Redis with call parameters
   const reply = await client.get(id);
 
   if (reply) {
